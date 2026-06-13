@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Usuario } from '../types';
 import { usuariosService } from '../services/usuarios.service';
 
@@ -34,7 +35,15 @@ export function UsuariosList() {
 
   return (
     <div className="mx-auto max-w-4xl">
-      <h1 className="mb-6 text-2xl font-bold text-gray-800">Usuarios</h1>
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-2xl font-bold text-gray-800">Usuarios</h1>
+        <Link
+          to="/usuarios/nuevo"
+          className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700"
+        >
+          + Nuevo usuario
+        </Link>
+      </div>
 
       {error && (
         <p className="mb-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
@@ -78,14 +87,22 @@ export function UsuariosList() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    {u.ativo && (
-                      <button
-                        onClick={() => inativar(u)}
-                        className="text-xs text-red-600 hover:underline"
+                    <div className="flex justify-end gap-2">
+                      <Link
+                        to={`/usuarios/${u.id}/editar`}
+                        className="text-xs text-brand-700 hover:underline"
                       >
-                        Inativar
-                      </button>
-                    )}
+                        Editar
+                      </Link>
+                      {u.ativo && (
+                        <button
+                          onClick={() => inativar(u)}
+                          className="text-xs text-red-600 hover:underline"
+                        >
+                          Inativar
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))

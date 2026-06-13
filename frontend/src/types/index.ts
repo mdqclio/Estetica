@@ -24,6 +24,14 @@ export interface Cliente {
   updatedAt: string;
 }
 
+export interface UsuarioInput {
+  nome: string;
+  email: string;
+  senha?: string;
+  perfil: Perfil;
+  ativo?: boolean;
+}
+
 export interface ClienteInput {
   nome: string;
   cpf: string;
