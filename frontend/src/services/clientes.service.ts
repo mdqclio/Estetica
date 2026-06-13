@@ -48,5 +48,5 @@ function clean(input: ClienteInput): ClienteInput {
       out[k] = v;
     }
   });
-  return out as ClienteInput;
+  return out as unknown as ClienteInput;
 }
