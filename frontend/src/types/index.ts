@@ -42,6 +42,26 @@ export interface ClienteInput {
   observacoes?: string;
 }
 
+export interface Servico {
+  id: string;
+  nome: string;
+  descricao?: string | null;
+  duracaoMinutos: number;
+  // El backend usa Decimal y lo serializa como string en JSON.
+  preco: string;
+  ativo: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ServicoInput {
+  nome: string;
+  descricao?: string;
+  duracaoMinutos: number;
+  preco: number;
+  ativo?: boolean;
+}
+
 export interface Paginated<T> {
   data: T[];
   total: number;

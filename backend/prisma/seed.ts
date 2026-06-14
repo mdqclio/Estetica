@@ -84,6 +84,54 @@ async function main() {
     console.log(`  ✓ Cliente: ${c.nome}`);
   }
 
+  // ---- Servicios de ejemplo ----
+  // `nome` no es único en el schema, así que upsert por nome vía findFirst
+  // para que el seed sea idempotente.
+  const servicos = [
+    {
+      nome: 'Limpeza de pele',
+      descricao: 'Limpieza facial profunda con extracción.',
+      duracaoMinutos: 60,
+      preco: 120.0,
+    },
+    {
+      nome: 'Massagem relaxante',
+      descricao: 'Masaje corporal de relajación.',
+      duracaoMinutos: 50,
+      preco: 150.0,
+    },
+    {
+      nome: 'Depilação a cera',
+      descricao: 'Depilación con cera, media pierna.',
+      duracaoMinutos: 30,
+      preco: 80.0,
+    },
+    {
+      nome: 'Design de sobrancelhas',
+      descricao: 'Diseño y modelado de cejas.',
+      duracaoMinutos: 20,
+      preco: 45.0,
+    },
+    {
+      nome: 'Manicure e pedicure',
+      descricao: 'Manicura y pedicura completa.',
+      duracaoMinutos: 75,
+      preco: 90.0,
+    },
+  ];
+
+  for (const s of servicos) {
+    const existente = await prisma.servico.findFirst({
+      where: { nome: s.nome },
+    });
+    if (existente) {
+      await prisma.servico.update({ where: { id: existente.id }, data: s });
+    } else {
+      await prisma.servico.create({ data: s });
+    }
+    console.log(`  ✓ Servicio: ${s.nome}`);
+  }
+
   console.log('✅ Seed completado.');
 }
 

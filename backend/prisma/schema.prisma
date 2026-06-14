@@ -45,3 +45,18 @@ model Cliente {
 
   @@map("clientes")
 }
+
+model Servico {
+  id             String   @id @default(uuid())
+  nome           String
+  descricao      String?
+  duracaoMinutos Int
+  // Decimal(10,2): estándar para dinero (evita errores de coma flotante).
+  // Prisma lo serializa como string en las respuestas JSON.
+  preco          Decimal  @db.Decimal(10, 2)
+  ativo          Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("servicos")
+}

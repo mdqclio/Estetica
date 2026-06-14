@@ -9,6 +9,8 @@ import { ClienteForm } from './pages/ClienteForm';
 import { ClienteDetail } from './pages/ClienteDetail';
 import { UsuariosList } from './pages/UsuariosList';
 import { UsuarioForm } from './pages/UsuarioForm';
+import { ServicosList } from './pages/ServicosList';
+import { ServicoForm } from './pages/ServicoForm';
 
 export default function App() {
   return (
@@ -40,6 +42,25 @@ export default function App() {
               element={
                 <RequireRole roles={['ADMIN', 'RECEPCIONISTA']}>
                   <ClienteForm />
+                </RequireRole>
+              }
+            />
+
+            {/* Servicios: lectura para todos; alta/edición solo ADMIN */}
+            <Route path="/servicos" element={<ServicosList />} />
+            <Route
+              path="/servicos/nuevo"
+              element={
+                <RequireRole roles={['ADMIN']}>
+                  <ServicoForm />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="/servicos/:id/editar"
+              element={
+                <RequireRole roles={['ADMIN']}>
+                  <ServicoForm />
                 </RequireRole>
               }
             />

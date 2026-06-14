@@ -16,7 +16,7 @@ control de acceso por roles (RBAC) y gestión de clientes y usuarios.
 estetica/
 ├── backend/                 NestJS + Prisma + PostgreSQL
 │   ├── prisma/
-│   │   ├── schema.prisma     Modelos Usuario y Cliente
+│   │   ├── schema.prisma     Modelos Usuario, Cliente y Servico
 │   │   └── seed.ts           Usuarios y clientes por defecto
 │   └── src/
 │       ├── modules/          auth · clientes · usuarios
@@ -101,6 +101,8 @@ npm run dev                   # app en http://localhost:5173
 | Crear / editar clientes       |  ✅   |      ✅       |     ❌       |
 | Inativar clientes             |  ✅   |      ✅       |     ❌       |
 | Reativar clientes             |  ✅   |      ❌       |     ❌       |
+| Listar / ver servicios        |  ✅   |      ✅       |     ✅       |
+| Crear / editar / (in)ativar servicios | ✅ |   ❌       |     ❌       |
 | Gestionar usuarios            |  ✅   |      ❌       |     ❌       |
 
 ## Endpoints
@@ -123,6 +125,14 @@ npm run dev                   # app en http://localhost:5173
 - `POST  /api/usuarios`
 - `PUT   /api/usuarios/:id`
 - `PATCH /api/usuarios/:id/inativar`
+
+### Servicios
+- `GET   /api/servicos` — listar/buscar (`?search=&page=&limit=&ativo=`) — todos
+- `GET   /api/servicos/:id` — todos
+- `POST  /api/servicos` — ADMIN
+- `PUT   /api/servicos/:id` — ADMIN
+- `PATCH /api/servicos/:id/inativar` — ADMIN
+- `PATCH /api/servicos/:id/reativar` — ADMIN
 
 ---
 

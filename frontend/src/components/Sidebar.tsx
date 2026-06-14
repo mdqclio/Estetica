@@ -43,6 +43,9 @@ export function Sidebar({ open, onClose }: Props) {
           <NavLink to="/clientes" className={navClass}>
             Clientes
           </NavLink>
+          <NavLink to="/servicos" className={navClass}>
+            Servicios
+          </NavLink>
           {hasRole('ADMIN') && (
             <NavLink to="/usuarios" className={navClass}>
               Usuarios
