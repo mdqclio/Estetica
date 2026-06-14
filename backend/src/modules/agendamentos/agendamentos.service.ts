@@ -112,6 +112,8 @@ export class AgendamentosService {
         profissionalId: dto.profissionalId,
         dataHoraInicio: inicio,
         dataHoraFim: fim,
+        // Snapshot del preco del servicio al crear el turno (base de los reportes).
+        valor: servico.preco,
         observacoes: dto.observacoes,
         // status arranca en AGENDADO (default del schema)
       },
@@ -163,6 +165,8 @@ export class AgendamentosService {
         profissionalId: dto.profissionalId,
         dataHoraInicio: inicio,
         dataHoraFim: fim,
+        // Si cambia el servicio, re-snapshot del nuevo preco; si no, se conserva.
+        valor: dto.servicoId ? servico.preco : undefined,
         observacoes: dto.observacoes,
       },
       include: INCLUDE,

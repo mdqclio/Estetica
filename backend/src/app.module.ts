@@ -7,6 +7,7 @@ import { UsuariosModule } from './modules/usuarios/usuarios.module';
 import { ServicosModule } from './modules/servicos/servicos.module';
 import { AgendamentosModule } from './modules/agendamentos/agendamentos.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { ReportesModule } from './modules/reportes/reportes.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
     ServicosModule,
     AgendamentosModule,
     DashboardModule,
+    ReportesModule,
   ],
 })
 export class AppModule {}

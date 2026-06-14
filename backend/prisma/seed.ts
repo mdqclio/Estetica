@@ -196,6 +196,7 @@ async function main() {
         dataHoraInicio: t.inicio,
         dataHoraFim: addMin(t.inicio, t.servico.duracaoMinutos),
         status: t.status,
+        valor: t.servico.preco, // snapshot del preco del servicio
         observacoes: t.observacoes,
       };
       if (existente) {

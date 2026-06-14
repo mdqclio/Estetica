@@ -14,6 +14,7 @@ import { ServicoForm } from './pages/ServicoForm';
 import { AgendamentosList } from './pages/AgendamentosList';
 import { AgendamentoForm } from './pages/AgendamentoForm';
 import { Dashboard } from './pages/Dashboard';
+import { Reportes } from './pages/Reportes';
 
 export default function App() {
   return (
@@ -85,6 +86,16 @@ export default function App() {
               element={
                 <RequireRole roles={['ADMIN', 'RECEPCIONISTA']}>
                   <AgendamentoForm />
+                </RequireRole>
+              }
+            />
+
+            {/* Reportes financieros: solo ADMIN */}
+            <Route
+              path="/reportes"
+              element={
+                <RequireRole roles={['ADMIN']}>
+                  <Reportes />
                 </RequireRole>
               }
             />

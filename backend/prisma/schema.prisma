@@ -86,6 +86,10 @@ model Agendamento {
   dataHoraInicio DateTime
   dataHoraFim    DateTime
   status         StatusAgendamento @default(AGENDADO)
+  // Snapshot del preco del servicio al momento de crear/asignar el turno.
+  // Los reportes financieros se calculan sobre este valor (NO sobre servico.preco
+  // actual), para que cambios futuros de precio no alteren el histórico.
+  valor          Decimal           @db.Decimal(10, 2)
   observacoes    String?
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt

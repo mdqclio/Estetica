@@ -19,12 +19,12 @@ estetica/
 │   │   ├── schema.prisma     Modelos Usuario, Cliente, Servico y Agendamento
 │   │   └── seed.ts           Usuarios y clientes por defecto
 │   └── src/
-│       ├── modules/          auth · clientes · usuarios · servicos · agendamentos · dashboard
+│       ├── modules/          auth · clientes · usuarios · servicos · agendamentos · dashboard · reportes
 │       ├── common/           guards (JwtAuthGuard, RolesGuard) + decorators (@Roles, @Public, @CurrentUser)
 │       └── prisma/           PrismaService global
 └── frontend/                React + TS + Tailwind
     └── src/
-        ├── pages/            Dashboard, Login, Clientes*, Usuarios*, Servicos*, Agendamentos*
+        ├── pages/            Dashboard, Login, Clientes*, Usuarios*, Servicos*, Agendamentos*, Reportes
         ├── components/       Layout, Sidebar, ProtectedRoute
         ├── services/         api (axios + interceptor JWT), clientes, usuarios, auth
         ├── hooks/            useAuth
@@ -107,6 +107,7 @@ npm run dev                   # app en http://localhost:5173
 | Crear / editar turnos         |  ✅   |      ✅       |     ❌       |
 | Cambiar estado de turnos      |  ✅   |      ✅       |     ❌       |
 | Ver dashboard                 |  ✅   |      ✅       | ✅ (solo su agenda) |
+| Ver reportes financieros      |  ✅   |      ❌       |     ❌       |
 | Gestionar usuarios            |  ✅   |      ❌       |     ❌       |
 
 ## Endpoints
@@ -158,6 +159,12 @@ Reglas de negocio:
 - Si no se envía `dataHoraFim`, se calcula con `dataHoraInicio + servico.duracaoMinutos`.
 - El `profissionalId` debe ser un usuario con perfil `PROFISSIONAL` y activo.
 - No se permiten dos turnos del mismo profesional que se solapen en el tiempo (los `CANCELADO` no bloquean). Turnos adyacentes (fin = inicio) sí se permiten.
+- Al crear el turno se guarda `valor` = `preco` del servicio en ese momento (snapshot). Si en una edición cambia el servicio, se re-snapshotea con el nuevo precio. Los reportes financieros usan este `valor`, no el `preco` actual del servicio.
+
+### Reportes financieros (solo ADMIN)
+Todos requieren rango de fechas (`?desde=YYYY-MM-DD&hasta=YYYY-MM-DD`) y se basan en `valor` de turnos `CONCLUIDO`.
+- `GET /api/reportes/resumen` — reporte consolidado del período: faturamento total, ticket promedio, tasa de cancelación, turnos por status, faturamento por servicio y por profesional, serie temporal (por día o por mes según el rango) y comparativa con el período anterior equivalente.
+- `GET /api/reportes/export` — mismo período exportado a CSV descargable (UTF-8 con BOM para Excel).
 
 ---
 

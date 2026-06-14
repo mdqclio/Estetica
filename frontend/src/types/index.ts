@@ -115,6 +115,34 @@ export interface DashboardMetrics {
   periodo: { inicio: string; fim: string };
 }
 
+export interface RankingItem {
+  id: string;
+  nome: string;
+  total: number;
+  quantidade: number;
+}
+
+export interface ReporteResumen {
+  periodo: { desde: string; hasta: string };
+  totalTurnos: number;
+  turnosConcluidos: number;
+  faturamentoTotal: number;
+  ticketMedio: number;
+  taxaCancelamento: number; // fracción 0..1
+  turnosPorStatus: Record<StatusAgendamento, number>;
+  faturamentoPorServico: RankingItem[];
+  faturamentoPorProfissional: RankingItem[];
+  serie: {
+    granularidade: 'dia' | 'mes';
+    pontos: { periodo: string; total: number }[];
+  };
+  comparativa: {
+    periodoAnterior: { desde: string; hasta: string };
+    faturamentoAnterior: number;
+    variacaoPct: number | null;
+  };
+}
+
 export interface Paginated<T> {
   data: T[];
   total: number;
