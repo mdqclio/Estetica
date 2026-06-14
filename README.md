@@ -19,12 +19,12 @@ estetica/
 │   │   ├── schema.prisma     Modelos Usuario, Cliente, Servico y Agendamento
 │   │   └── seed.ts           Usuarios y clientes por defecto
 │   └── src/
-│       ├── modules/          auth · clientes · usuarios
+│       ├── modules/          auth · clientes · usuarios · servicos · agendamentos · dashboard
 │       ├── common/           guards (JwtAuthGuard, RolesGuard) + decorators (@Roles, @Public, @CurrentUser)
 │       └── prisma/           PrismaService global
 └── frontend/                React + TS + Tailwind
     └── src/
-        ├── pages/            Login, ClientesList, ClienteForm, ClienteDetail, UsuariosList
+        ├── pages/            Dashboard, Login, Clientes*, Usuarios*, Servicos*, Agendamentos*
         ├── components/       Layout, Sidebar, ProtectedRoute
         ├── services/         api (axios + interceptor JWT), clientes, usuarios, auth
         ├── hooks/            useAuth
@@ -106,6 +106,7 @@ npm run dev                   # app en http://localhost:5173
 | Ver turnos                    |  ✅   |      ✅       | ✅ (solo su agenda) |
 | Crear / editar turnos         |  ✅   |      ✅       |     ❌       |
 | Cambiar estado de turnos      |  ✅   |      ✅       |     ❌       |
+| Ver dashboard                 |  ✅   |      ✅       | ✅ (solo su agenda) |
 | Gestionar usuarios            |  ✅   |      ❌       |     ❌       |
 
 ## Endpoints
@@ -113,6 +114,14 @@ npm run dev                   # app en http://localhost:5173
 ### Auth
 - `POST /api/auth/login` — pública
 - `GET  /api/auth/me` — usuario autenticado
+
+### Dashboard
+- `GET /api/dashboard/metrics` — todos (PROFISSIONAL recibe métricas acotadas a su agenda)
+
+  Devuelve: `clientesAtivos`, `turnosHoje`, `turnosSemana`, `turnosPorStatus`,
+  `proximosTurnos` (5), `faturamentoEstimado` (suma de `preco` de servicios en turnos
+  `CONCLUIDO` de la semana), `servicosMaisSolicitados` (top 5), `turnosPorDia` (semana
+  actual, lun→dom) y `periodo`. Es la pantalla inicial tras el login.
 
 ### Clientes
 - `GET   /api/clientes` — listar/buscar (`?search=&page=&limit=&ativo=`) — todos

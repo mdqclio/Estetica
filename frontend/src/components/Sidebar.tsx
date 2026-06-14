@@ -40,6 +40,9 @@ export function Sidebar({ open, onClose }: Props) {
         </div>
 
         <nav className="flex-1 space-y-1 px-3 py-4" onClick={onClose}>
+          <NavLink to="/dashboard" className={navClass}>
+            Dashboard
+          </NavLink>
           <NavLink to="/clientes" className={navClass}>
             Clientes
           </NavLink>

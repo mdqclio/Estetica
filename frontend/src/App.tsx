@@ -13,6 +13,7 @@ import { ServicosList } from './pages/ServicosList';
 import { ServicoForm } from './pages/ServicoForm';
 import { AgendamentosList } from './pages/AgendamentosList';
 import { AgendamentoForm } from './pages/AgendamentoForm';
+import { Dashboard } from './pages/Dashboard';
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
               </ProtectedRoute>
             }
           >
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/clientes" element={<ClientesList />} />
             {/* Alta/edición de clientes: PROFISSIONAL es solo lectura */}
             <Route
@@ -114,8 +116,8 @@ export default function App() {
             />
           </Route>
 
-          <Route path="/" element={<Navigate to="/clientes" replace />} />
-          <Route path="*" element={<Navigate to="/clientes" replace />} />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

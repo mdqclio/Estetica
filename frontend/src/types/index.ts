@@ -99,6 +99,22 @@ export interface AgendamentoInput {
   observacoes?: string;
 }
 
+export interface DashboardMetrics {
+  clientesAtivos: number;
+  turnosHoje: number;
+  turnosSemana: number;
+  turnosPorStatus: Record<StatusAgendamento, number>;
+  proximosTurnos: Agendamento[];
+  faturamentoEstimado: number;
+  servicosMaisSolicitados: {
+    servicoId: string;
+    nome: string;
+    total: number;
+  }[];
+  turnosPorDia: { data: string; total: number }[];
+  periodo: { inicio: string; fim: string };
+}
+
 export interface Paginated<T> {
   data: T[];
   total: number;

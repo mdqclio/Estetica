@@ -27,7 +27,7 @@ export function Login() {
     setLoading(true);
     try {
       await login(email, senha);
-      navigate('/clientes');
+      navigate('/dashboard');
     } catch (err: any) {
       setError(
         err?.response?.data?.message || 'Credenciales inválidas. Intenta de nuevo.',
