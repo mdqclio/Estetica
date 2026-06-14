@@ -6,6 +6,13 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Variables de entorno obligatorias (falla rápido y claro si faltan en prod).
+  for (const key of ['DATABASE_URL', 'JWT_SECRET']) {
+    if (!process.env[key]) {
+      throw new Error(`Falta la variable de entorno obligatoria: ${key}`);
+    }
+  }
+
   // Prefijo global
   app.setGlobalPrefix('api');
 
@@ -28,8 +35,10 @@ async function bootstrap() {
   const reflector = app.get(Reflector);
   app.useGlobalGuards(new JwtAuthGuard(reflector));
 
+  // Render asigna el puerto vía process.env.PORT; en local cae a 3001.
   const port = process.env.PORT || 3001;
-  await app.listen(port);
-  console.log(`🚀 API escuchando en http://localhost:${port}/api`);
+  // Bind a 0.0.0.0 para que Render pueda enrutar el tráfico al contenedor.
+  await app.listen(port, '0.0.0.0');
+  console.log(`🚀 API escuchando en el puerto ${port} (prefijo /api)`);
 }
 bootstrap();

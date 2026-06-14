@@ -52,10 +52,10 @@ createdb estetica
 
 ```bash
 cd backend
-cp .env.example .env          # ajusta DATABASE_URL, JWT_SECRET, PORT
+cp .env.example .env          # ajusta DATABASE_URL, DIRECT_URL, JWT_SECRET, PORT
 npm install
 npx prisma generate           # genera el cliente Prisma
-npx prisma migrate dev --name init   # crea las tablas
+npx prisma migrate dev        # aplica las migraciones (crea las tablas)
 npm run seed                  # carga usuarios y clientes de ejemplo
 npm run start:dev             # API en http://localhost:3001/api
 ```
@@ -64,11 +64,15 @@ Variables en `backend/.env`:
 
 ```
 DATABASE_URL="postgresql://usuario:password@localhost:5432/estetica?schema=public"
+DIRECT_URL="postgresql://usuario:password@localhost:5432/estetica?schema=public"
 JWT_SECRET="cambia-esta-clave-super-secreta"
 JWT_EXPIRES_IN="1d"
 PORT=3001
 FRONTEND_URL="http://localhost:5173"
 ```
+
+> En local `DATABASE_URL` y `DIRECT_URL` apuntan a la misma base. La distinción
+> solo importa en Supabase (ver sección **Deploy**).
 
 ## 3. Frontend
 
@@ -126,10 +130,93 @@ npm run dev                   # app en http://localhost:5173
 
 ```bash
 # Terminal 1 — backend
-cd backend && npm install && npx prisma generate && npx prisma migrate dev --name init && npm run seed && npm run start:dev
+cd backend && npm install && npx prisma generate && npx prisma migrate dev && npm run seed && npm run start:dev
 
 # Terminal 2 — frontend
 cd frontend && npm install && npm run dev
 ```
 
 Abre http://localhost:5173 e inicia sesión con `admin@estetica.com / admin123`.
+
+---
+
+## Deploy a producción
+
+Arquitectura: **base de datos en Supabase** · **backend (NestJS) en Render** · **frontend (React) en Vercel**.
+
+El orden importa: primero la base (Supabase), luego el backend (Render) y por
+último el frontend (Vercel), porque cada paso necesita la URL del anterior.
+
+### 1. Base de datos — Supabase
+
+1. Crea un proyecto en [supabase.com](https://supabase.com) y define una contraseña de base de datos.
+2. Ve a **Project Settings → Database → Connection string** y copia las dos cadenas:
+   - **Transaction pooler** (puerto **6543**) → será `DATABASE_URL`. Añádele `?pgbouncer=true` al final.
+   - **Direct connection** (puerto **5432**) → será `DIRECT_URL`.
+3. Reemplaza `[YOUR-PASSWORD]` en ambas por la contraseña real.
+
+| Variable       | Cadena de Supabase            | Puerto | Para qué                          |
+| -------------- | ----------------------------- | :----: | --------------------------------- |
+| `DATABASE_URL` | Transaction pooler + `?pgbouncer=true` |  6543  | La app en runtime (Prisma Client) |
+| `DIRECT_URL`   | Direct connection             |  5432  | `prisma migrate deploy`           |
+
+> Por qué dos: el pooler (6543) maneja muchas conexiones cortas — ideal para la
+> app. Las migraciones necesitan una conexión directa (5432) sin pgbouncer.
+
+### 2. Backend — Render
+
+El repo incluye `render.yaml` (Blueprint). Crea un **Web Service** apuntando a
+este repo; Render detecta la config. Si lo configuras a mano:
+
+- **Root Directory:** `backend`
+- **Build Command:** `npm install && npm run build && npm run migrate:deploy`
+- **Start Command:** `npm run start:prod`
+
+El build genera el cliente Prisma, compila Nest y aplica las migraciones con
+`prisma migrate deploy` (nunca `migrate dev` en producción).
+
+Variables de entorno en Render (**Environment**):
+
+| Variable         | Valor                                                        |
+| ---------------- | ------------------------------------------------------------ |
+| `DATABASE_URL`   | Pooler de Supabase (6543, `?pgbouncer=true`)                 |
+| `DIRECT_URL`     | Conexión directa de Supabase (5432)                          |
+| `JWT_SECRET`     | Clave aleatoria larga — `openssl rand -base64 48`            |
+| `JWT_EXPIRES_IN` | `1d`                                                         |
+| `FRONTEND_URL`   | URL del frontend en Vercel (la obtienes en el paso 3)        |
+
+> `PORT` lo inyecta Render automáticamente — **no** lo declares.
+
+**Seed (una sola vez):** tras el primer deploy, abre la **Shell** del servicio en
+Render y corre `npm run seed:prod` para crear los usuarios por defecto. Es
+idempotente (usa `upsert`), pero corre solo una vez.
+
+### 3. Frontend — Vercel
+
+Importa el repo en [vercel.com](https://vercel.com):
+
+- **Root Directory:** `frontend`
+- **Framework Preset:** Vite (Build `npm run build`, Output `dist`)
+
+Variable de entorno en Vercel:
+
+| Variable       | Valor                                          |
+| -------------- | ---------------------------------------------- |
+| `VITE_API_URL` | `https://<tu-backend>.onrender.com/api`        |
+
+> Las variables `VITE_*` se incrustan en build. Si cambias `VITE_API_URL`,
+> vuelve a desplegar (redeploy) el frontend.
+
+### 4. Cerrar el círculo de CORS
+
+Cuando Vercel te dé la URL final del frontend, vuelve a Render y pon esa URL en
+`FRONTEND_URL`. Render reiniciará el servicio y el backend aceptará las
+peticiones del frontend (CORS).
+
+### Resumen de variables por plataforma
+
+| Plataforma   | Variables                                                            |
+| ------------ | -------------------------------------------------------------------- |
+| **Supabase** | (provee las cadenas de conexión — no se configuran variables aquí)   |
+| **Render**   | `DATABASE_URL`, `DIRECT_URL`, `JWT_SECRET`, `JWT_EXPIRES_IN`, `FRONTEND_URL` |
+| **Vercel**   | `VITE_API_URL`                                                       |

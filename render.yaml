@@ -1,0 +1,23 @@
+# Render Blueprint para el backend NestJS.
+# La base de datos vive en Supabase (no en Render), así que solo se define el web service.
+services:
+  - type: web
+    name: estetica-backend
+    runtime: node
+    rootDir: backend
+    plan: free
+    # Genera el cliente Prisma, compila Nest y aplica las migraciones pendientes.
+    buildCommand: npm install && npm run build && npm run migrate:deploy
+    startCommand: npm run start:prod
+    envVars:
+      - key: DATABASE_URL
+        sync: false # pooler de Supabase (puerto 6543, ?pgbouncer=true)
+      - key: DIRECT_URL
+        sync: false # conexión directa de Supabase (puerto 5432)
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 1d
+      - key: FRONTEND_URL
+        sync: false # URL del frontend en Vercel
+      # PORT lo inyecta Render automáticamente; no hace falta declararlo.
