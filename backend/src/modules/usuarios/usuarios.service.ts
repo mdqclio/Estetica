@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { Perfil } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
@@ -25,6 +26,15 @@ export class UsuariosService {
   findAll() {
     return this.prisma.usuario.findMany({
       select: SELECT,
+      orderBy: { nome: 'asc' },
+    });
+  }
+
+  // Profesionales activos (id + nome) para selects de agendamentos.
+  findProfissionais() {
+    return this.prisma.usuario.findMany({
+      where: { perfil: Perfil.PROFISSIONAL, ativo: true },
+      select: { id: true, nome: true },
       orderBy: { nome: 'asc' },
     });
   }

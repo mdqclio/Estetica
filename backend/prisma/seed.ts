@@ -1,4 +1,4 @@
-import { PrismaClient, Perfil } from '@prisma/client';
+import { PrismaClient, Perfil, StatusAgendamento } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
@@ -130,6 +130,86 @@ async function main() {
       await prisma.servico.create({ data: s });
     }
     console.log(`  ✓ Servicio: ${s.nome}`);
+  }
+
+  // ---- Turnos (agendamentos) de ejemplo ----
+  const profissional = await prisma.usuario.findUnique({
+    where: { email: 'profissional@estetica.com' },
+  });
+  const ana = await prisma.cliente.findUnique({
+    where: { cpf: '12345678901' },
+  });
+  const bruno = await prisma.cliente.findUnique({
+    where: { cpf: '23456789012' },
+  });
+  const limpeza = await prisma.servico.findFirst({
+    where: { nome: 'Limpeza de pele' },
+  });
+  const massagem = await prisma.servico.findFirst({
+    where: { nome: 'Massagem relaxante' },
+  });
+
+  if (profissional && ana && bruno && limpeza && massagem) {
+    const addMin = (d: Date, min: number) =>
+      new Date(d.getTime() + min * 60_000);
+
+    // Base: mañana a las 10:00 (hora local del entorno).
+    const base = new Date();
+    base.setDate(base.getDate() + 1);
+    base.setHours(10, 0, 0, 0);
+
+    const turnos = [
+      {
+        cliente: ana,
+        servico: limpeza,
+        inicio: base,
+        status: StatusAgendamento.AGENDADO,
+        observacoes: 'Primera visita.',
+      },
+      {
+        cliente: bruno,
+        servico: massagem,
+        inicio: addMin(base, 120), // +2h, sin solapar
+        status: StatusAgendamento.CONFIRMADO,
+        observacoes: '',
+      },
+      {
+        cliente: ana,
+        servico: massagem,
+        inicio: addMin(base, -24 * 60), // ayer
+        status: StatusAgendamento.CONCLUIDO,
+        observacoes: 'Sesión completada.',
+      },
+    ];
+
+    for (const t of turnos) {
+      const existente = await prisma.agendamento.findFirst({
+        where: {
+          profissionalId: profissional.id,
+          dataHoraInicio: t.inicio,
+        },
+      });
+      const data = {
+        clienteId: t.cliente.id,
+        servicoId: t.servico.id,
+        profissionalId: profissional.id,
+        dataHoraInicio: t.inicio,
+        dataHoraFim: addMin(t.inicio, t.servico.duracaoMinutos),
+        status: t.status,
+        observacoes: t.observacoes,
+      };
+      if (existente) {
+        await prisma.agendamento.update({
+          where: { id: existente.id },
+          data,
+        });
+      } else {
+        await prisma.agendamento.create({ data });
+      }
+      console.log(
+        `  ✓ Turno: ${t.cliente.nome} · ${t.servico.nome} (${t.status})`,
+      );
+    }
   }
 
   console.log('✅ Seed completado.');

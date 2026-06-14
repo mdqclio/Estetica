@@ -16,7 +16,7 @@ control de acceso por roles (RBAC) y gestión de clientes y usuarios.
 estetica/
 ├── backend/                 NestJS + Prisma + PostgreSQL
 │   ├── prisma/
-│   │   ├── schema.prisma     Modelos Usuario, Cliente y Servico
+│   │   ├── schema.prisma     Modelos Usuario, Cliente, Servico y Agendamento
 │   │   └── seed.ts           Usuarios y clientes por defecto
 │   └── src/
 │       ├── modules/          auth · clientes · usuarios
@@ -103,6 +103,9 @@ npm run dev                   # app en http://localhost:5173
 | Reativar clientes             |  ✅   |      ❌       |     ❌       |
 | Listar / ver servicios        |  ✅   |      ✅       |     ✅       |
 | Crear / editar / (in)ativar servicios | ✅ |   ❌       |     ❌       |
+| Ver turnos                    |  ✅   |      ✅       | ✅ (solo su agenda) |
+| Crear / editar turnos         |  ✅   |      ✅       |     ❌       |
+| Cambiar estado de turnos      |  ✅   |      ✅       |     ❌       |
 | Gestionar usuarios            |  ✅   |      ❌       |     ❌       |
 
 ## Endpoints
@@ -121,6 +124,7 @@ npm run dev                   # app en http://localhost:5173
 
 ### Usuarios (solo ADMIN)
 - `GET   /api/usuarios`
+- `GET   /api/usuarios/profissionais` — lista reducida (id, nome) de profesionales activos — ADMIN, RECEPCIONISTA
 - `GET   /api/usuarios/:id`
 - `POST  /api/usuarios`
 - `PUT   /api/usuarios/:id`
@@ -133,6 +137,18 @@ npm run dev                   # app en http://localhost:5173
 - `PUT   /api/servicos/:id` — ADMIN
 - `PATCH /api/servicos/:id/inativar` — ADMIN
 - `PATCH /api/servicos/:id/reativar` — ADMIN
+
+### Agendamentos (turnos)
+- `GET   /api/agendamentos` — listar/filtrar (`?dataInicio=&dataFim=&profissionalId=&clienteId=&status=&page=&limit=`) — todos (PROFISSIONAL solo su agenda)
+- `GET   /api/agendamentos/:id` — todos (PROFISSIONAL solo si es propio)
+- `POST  /api/agendamentos` — ADMIN, RECEPCIONISTA
+- `PUT   /api/agendamentos/:id` — ADMIN, RECEPCIONISTA
+- `PATCH /api/agendamentos/:id/status` — ADMIN, RECEPCIONISTA (body `{ "status": "CONFIRMADO|CONCLUIDO|CANCELADO" }`)
+
+Reglas de negocio:
+- Si no se envía `dataHoraFim`, se calcula con `dataHoraInicio + servico.duracaoMinutos`.
+- El `profissionalId` debe ser un usuario con perfil `PROFISSIONAL` y activo.
+- No se permiten dos turnos del mismo profesional que se solapen en el tiempo (los `CANCELADO` no bloquean). Turnos adyacentes (fin = inicio) sí se permiten.
 
 ---
 

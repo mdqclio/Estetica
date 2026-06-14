@@ -1,9 +1,16 @@
 import api from './api';
-import { Usuario, UsuarioInput } from '../types';
+import { Usuario, UsuarioInput, ProfissionalRef } from '../types';
 
 export const usuariosService = {
   async list(): Promise<Usuario[]> {
     const { data } = await api.get<Usuario[]>('/usuarios');
+    return data;
+  },
+  // Profesionales activos (id + nome). Accesible a ADMIN y RECEPCIONISTA.
+  async profissionais(): Promise<ProfissionalRef[]> {
+    const { data } = await api.get<ProfissionalRef[]>(
+      '/usuarios/profissionais',
+    );
     return data;
   },
   async get(id: string): Promise<Usuario> {

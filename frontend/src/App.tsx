@@ -11,6 +11,8 @@ import { UsuariosList } from './pages/UsuariosList';
 import { UsuarioForm } from './pages/UsuarioForm';
 import { ServicosList } from './pages/ServicosList';
 import { ServicoForm } from './pages/ServicoForm';
+import { AgendamentosList } from './pages/AgendamentosList';
+import { AgendamentoForm } from './pages/AgendamentoForm';
 
 export default function App() {
   return (
@@ -61,6 +63,26 @@ export default function App() {
               element={
                 <RequireRole roles={['ADMIN']}>
                   <ServicoForm />
+                </RequireRole>
+              }
+            />
+
+            {/* Turnos: lectura para todos (PROFISSIONAL solo su agenda, filtrado
+                en backend); alta/edición solo ADMIN y RECEPCIONISTA */}
+            <Route path="/agendamentos" element={<AgendamentosList />} />
+            <Route
+              path="/agendamentos/nuevo"
+              element={
+                <RequireRole roles={['ADMIN', 'RECEPCIONISTA']}>
+                  <AgendamentoForm />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="/agendamentos/:id/editar"
+              element={
+                <RequireRole roles={['ADMIN', 'RECEPCIONISTA']}>
+                  <AgendamentoForm />
                 </RequireRole>
               }
             />

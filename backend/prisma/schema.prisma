@@ -17,6 +17,13 @@ enum Perfil {
   PROFISSIONAL
 }
 
+enum StatusAgendamento {
+  AGENDADO
+  CONFIRMADO
+  CONCLUIDO
+  CANCELADO
+}
+
 model Usuario {
   id        String   @id @default(uuid())
   nome      String
@@ -26,6 +33,9 @@ model Usuario {
   ativo     Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Turnos en los que este usuario es el profesional asignado
+  agendamentos Agendamento[] @relation("ProfissionalAgendamentos")
 
   @@map("usuarios")
 }
@@ -43,6 +53,8 @@ model Cliente {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
+  agendamentos Agendamento[]
+
   @@map("clientes")
 }
 
@@ -58,5 +70,28 @@ model Servico {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
+  agendamentos Agendamento[]
+
   @@map("servicos")
+}
+
+model Agendamento {
+  id             String            @id @default(uuid())
+  clienteId      String
+  cliente        Cliente           @relation(fields: [clienteId], references: [id])
+  servicoId      String
+  servico        Servico           @relation(fields: [servicoId], references: [id])
+  profissionalId String
+  profissional   Usuario           @relation("ProfissionalAgendamentos", fields: [profissionalId], references: [id])
+  dataHoraInicio DateTime
+  dataHoraFim    DateTime
+  status         StatusAgendamento @default(AGENDADO)
+  observacoes    String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@index([profissionalId, dataHoraInicio])
+  @@index([clienteId])
+  @@index([servicoId])
+  @@map("agendamentos")
 }

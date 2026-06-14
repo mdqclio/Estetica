@@ -27,6 +27,15 @@ export class UsuariosController {
     return this.usuariosService.findAll();
   }
 
+  // Lista reducida de profesionales activos, para poblar selects (ej. agendamentos).
+  // Accesible también a RECEPCIONISTA (override del @Roles(ADMIN) de la clase).
+  // Declarado antes de ':id' para que no lo capture la ruta paramétrica.
+  @Get('profissionais')
+  @Roles(Perfil.ADMIN, Perfil.RECEPCIONISTA)
+  findProfissionais() {
+    return this.usuariosService.findProfissionais();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usuariosService.findOne(id);

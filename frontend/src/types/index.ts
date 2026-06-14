@@ -62,6 +62,43 @@ export interface ServicoInput {
   ativo?: boolean;
 }
 
+export type StatusAgendamento =
+  | 'AGENDADO'
+  | 'CONFIRMADO'
+  | 'CONCLUIDO'
+  | 'CANCELADO';
+
+export interface ProfissionalRef {
+  id: string;
+  nome: string;
+}
+
+export interface Agendamento {
+  id: string;
+  clienteId: string;
+  servicoId: string;
+  profissionalId: string;
+  dataHoraInicio: string;
+  dataHoraFim: string;
+  status: StatusAgendamento;
+  observacoes?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  // Relaciones incluidas por el backend
+  cliente?: { id: string; nome: string };
+  servico?: { id: string; nome: string; duracaoMinutos: number; preco: string };
+  profissional?: { id: string; nome: string };
+}
+
+export interface AgendamentoInput {
+  clienteId: string;
+  servicoId: string;
+  profissionalId: string;
+  dataHoraInicio: string; // ISO 8601
+  dataHoraFim?: string;
+  observacoes?: string;
+}
+
 export interface Paginated<T> {
   data: T[];
   total: number;
