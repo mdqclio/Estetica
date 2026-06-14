@@ -10,14 +10,14 @@ import { Perfil } from '@prisma/client';
 
 export class CreateUsuarioDto {
   @IsString()
-  @IsNotEmpty({ message: 'El nombre es obligatorio' })
+  @IsNotEmpty({ message: 'O nome é obrigatório' })
   nome: string;
 
-  @IsEmail({}, { message: 'Email inválido' })
+  @IsEmail({}, { message: 'E-mail inválido' })
   email: string;
 
   @IsString()
-  @MinLength(6, { message: 'La contraseña debe tener al menos 6 caracteres' })
+  @MinLength(6, { message: 'A senha deve ter no mínimo 6 caracteres' })
   senha: string;
 
   @IsEnum(Perfil, { message: 'Perfil inválido' })

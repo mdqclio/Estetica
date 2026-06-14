@@ -37,7 +37,7 @@ export function ServicosList() {
       const data = await servicosService.list({ search, page, limit: LIMIT });
       setResult(data);
     } catch {
-      setError('No se pudieron cargar los servicios.');
+      setError('Não foi possível carregar os serviços.');
     } finally {
       setLoading(false);
     }
@@ -66,20 +66,20 @@ export function ServicosList() {
       }
       load();
     } catch (err: any) {
-      alert(err?.response?.data?.message || 'Acción no permitida.');
+      alert(err?.response?.data?.message || 'Ação não permitida.');
     }
   }
 
   return (
     <div className="mx-auto max-w-5xl">
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">Servicios</h1>
+        <h1 className="text-2xl font-bold text-gray-800">Serviços</h1>
         {podeGerenciar && (
           <Link
             to="/servicos/nuevo"
             className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700"
           >
-            + Nuevo servicio
+            + Novo serviço
           </Link>
         )}
       </div>
@@ -88,7 +88,7 @@ export function ServicosList() {
         type="text"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        placeholder="Buscar por nombre o descripción…"
+        placeholder="Buscar por nome ou descrição…"
         className="mb-4 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
       />
 
@@ -102,18 +102,18 @@ export function ServicosList() {
         <table className="w-full text-left text-sm">
           <thead className="bg-gray-50 text-xs uppercase text-gray-500">
             <tr>
-              <th className="px-4 py-3">Nombre</th>
-              <th className="hidden px-4 py-3 md:table-cell">Duración</th>
-              <th className="px-4 py-3">Precio</th>
-              <th className="px-4 py-3">Estado</th>
-              <th className="px-4 py-3 text-right">Acciones</th>
+              <th className="px-4 py-3">Nome</th>
+              <th className="hidden px-4 py-3 md:table-cell">Duração</th>
+              <th className="px-4 py-3">Preço</th>
+              <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3 text-right">Ações</th>
             </tr>
           </thead>
           <tbody className="divide-y">
             {loading ? (
               <tr>
                 <td colSpan={5} className="px-4 py-8 text-center text-gray-400">
-                  Cargando…
+                  Carregando…
                 </td>
               </tr>
             ) : result && result.data.length > 0 ? (
@@ -141,7 +141,7 @@ export function ServicosList() {
                           : 'bg-gray-200 text-gray-600'
                       }`}
                     >
-                      {s.ativo ? 'Activo' : 'Inactivo'}
+                      {s.ativo ? 'Ativo' : 'Inativo'}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
@@ -180,7 +180,7 @@ export function ServicosList() {
             ) : (
               <tr>
                 <td colSpan={5} className="px-4 py-8 text-center text-gray-400">
-                  No hay servicios.
+                  Nenhum serviço encontrado.
                 </td>
               </tr>
             )}
@@ -191,7 +191,7 @@ export function ServicosList() {
       {result && result.totalPages > 1 && (
         <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
           <span>
-            Página {result.page} de {result.totalPages} · {result.total} total
+            Página {result.page} de {result.totalPages} · {result.total} no total
           </span>
           <div className="flex gap-2">
             <button
@@ -206,7 +206,7 @@ export function ServicosList() {
               onClick={() => setPage((p) => p + 1)}
               className="rounded-lg border px-3 py-1 disabled:opacity-50"
             >
-              Siguiente
+              Próxima
             </button>
           </div>
         </div>

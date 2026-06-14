@@ -4,9 +4,9 @@ import * as bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Sembrando base de datos...');
+  console.log('🌱 Populando banco de dados...');
 
-  // ---- Usuarios por defecto ----
+  // ---- Usuários padrão ----
   const usuarios = [
     {
       nome: 'Administrador',
@@ -15,13 +15,13 @@ async function main() {
       perfil: Perfil.ADMIN,
     },
     {
-      nome: 'Recepción',
+      nome: 'Recepção',
       email: 'recepcao@estetica.com',
       senha: 'recepcao123',
       perfil: Perfil.RECEPCIONISTA,
     },
     {
-      nome: 'Profesional Ejemplo',
+      nome: 'Profissional Exemplo',
       email: 'profissional@estetica.com',
       senha: 'profissional123',
       perfil: Perfil.PROFISSIONAL,
@@ -41,10 +41,10 @@ async function main() {
         ativo: true,
       },
     });
-    console.log(`  ✓ Usuario: ${u.email} (${u.perfil})`);
+    console.log(`  ✓ Usuário: ${u.email} (${u.perfil})`);
   }
 
-  // ---- Clientes de ejemplo ----
+  // ---- Clientes de exemplo ----
   const clientes = [
     {
       nome: 'Ana Pereira',
@@ -53,7 +53,7 @@ async function main() {
       email: 'ana.pereira@example.com',
       dataNascimento: new Date('1990-05-12'),
       endereco: 'Rua das Flores, 100 - São Paulo',
-      observacoes: 'Alergia a productos con fragancia.',
+      observacoes: 'Alergia a produtos com fragrância.',
     },
     {
       nome: 'Bruno Carvalho',
@@ -62,7 +62,7 @@ async function main() {
       email: 'bruno.carvalho@example.com',
       dataNascimento: new Date('1985-11-03'),
       endereco: 'Av. Paulista, 2000 - São Paulo',
-      observacoes: 'Prefiere citas por la mañana.',
+      observacoes: 'Prefere horários pela manhã.',
     },
     {
       nome: 'Carla Souza',
@@ -84,37 +84,37 @@ async function main() {
     console.log(`  ✓ Cliente: ${c.nome}`);
   }
 
-  // ---- Servicios de ejemplo ----
-  // `nome` no es único en el schema, así que upsert por nome vía findFirst
-  // para que el seed sea idempotente.
+  // ---- Serviços de exemplo ----
+  // `nome` não é único no schema, então upsert por nome via findFirst
+  // para que o seed seja idempotente.
   const servicos = [
     {
       nome: 'Limpeza de pele',
-      descricao: 'Limpieza facial profunda con extracción.',
+      descricao: 'Limpeza facial profunda com extração.',
       duracaoMinutos: 60,
       preco: 120.0,
     },
     {
       nome: 'Massagem relaxante',
-      descricao: 'Masaje corporal de relajación.',
+      descricao: 'Massagem corporal de relaxamento.',
       duracaoMinutos: 50,
       preco: 150.0,
     },
     {
       nome: 'Depilação a cera',
-      descricao: 'Depilación con cera, media pierna.',
+      descricao: 'Depilação com cera, meia perna.',
       duracaoMinutos: 30,
       preco: 80.0,
     },
     {
       nome: 'Design de sobrancelhas',
-      descricao: 'Diseño y modelado de cejas.',
+      descricao: 'Design e modelagem de sobrancelhas.',
       duracaoMinutos: 20,
       preco: 45.0,
     },
     {
       nome: 'Manicure e pedicure',
-      descricao: 'Manicura y pedicura completa.',
+      descricao: 'Manicure e pedicure completa.',
       duracaoMinutos: 75,
       preco: 90.0,
     },
@@ -129,10 +129,10 @@ async function main() {
     } else {
       await prisma.servico.create({ data: s });
     }
-    console.log(`  ✓ Servicio: ${s.nome}`);
+    console.log(`  ✓ Serviço: ${s.nome}`);
   }
 
-  // ---- Turnos (agendamentos) de ejemplo ----
+  // ---- Agendamentos de exemplo ----
   const profissional = await prisma.usuario.findUnique({
     where: { email: 'profissional@estetica.com' },
   });
@@ -153,7 +153,7 @@ async function main() {
     const addMin = (d: Date, min: number) =>
       new Date(d.getTime() + min * 60_000);
 
-    // Base: mañana a las 10:00 (hora local del entorno).
+    // Base: amanhã às 10:00 (hora local do ambiente).
     const base = new Date();
     base.setDate(base.getDate() + 1);
     base.setHours(10, 0, 0, 0);
@@ -164,21 +164,21 @@ async function main() {
         servico: limpeza,
         inicio: base,
         status: StatusAgendamento.AGENDADO,
-        observacoes: 'Primera visita.',
+        observacoes: 'Primeira visita.',
       },
       {
         cliente: bruno,
         servico: massagem,
-        inicio: addMin(base, 120), // +2h, sin solapar
+        inicio: addMin(base, 120), // +2h, sem sobreposição
         status: StatusAgendamento.CONFIRMADO,
         observacoes: '',
       },
       {
         cliente: ana,
         servico: massagem,
-        inicio: addMin(base, -24 * 60), // ayer
+        inicio: addMin(base, -24 * 60), // ontem
         status: StatusAgendamento.CONCLUIDO,
-        observacoes: 'Sesión completada.',
+        observacoes: 'Sessão concluída.',
       },
     ];
 
@@ -196,7 +196,7 @@ async function main() {
         dataHoraInicio: t.inicio,
         dataHoraFim: addMin(t.inicio, t.servico.duracaoMinutos),
         status: t.status,
-        valor: t.servico.preco, // snapshot del preco del servicio
+        valor: t.servico.preco, // snapshot do preço do serviço
         observacoes: t.observacoes,
       };
       if (existente) {
@@ -208,12 +208,12 @@ async function main() {
         await prisma.agendamento.create({ data });
       }
       console.log(
-        `  ✓ Turno: ${t.cliente.nome} · ${t.servico.nome} (${t.status})`,
+        `  ✓ Agendamento: ${t.cliente.nome} · ${t.servico.nome} (${t.status})`,
       );
     }
   }
 
-  console.log('✅ Seed completado.');
+  console.log('✅ Seed concluído.');
 }
 
 main()

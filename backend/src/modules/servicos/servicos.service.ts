@@ -49,7 +49,7 @@ export class ServicosService {
   async findOne(id: string) {
     const servico = await this.prisma.servico.findUnique({ where: { id } });
     if (!servico) {
-      throw new NotFoundException('Servicio no encontrado');
+      throw new NotFoundException('Serviço não encontrado');
     }
     return servico;
   }

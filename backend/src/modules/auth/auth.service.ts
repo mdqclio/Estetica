@@ -17,12 +17,12 @@ export class AuthService {
     });
 
     if (!usuario || !usuario.ativo) {
-      throw new UnauthorizedException('Credenciales inválidas');
+      throw new UnauthorizedException('Credenciais inválidas');
     }
 
     const senhaOk = await bcrypt.compare(dto.senha, usuario.senhaHash);
     if (!senhaOk) {
-      throw new UnauthorizedException('Credenciales inválidas');
+      throw new UnauthorizedException('Credenciais inválidas');
     }
 
     const payload = {

@@ -16,11 +16,11 @@ export function Login() {
     setError('');
 
     if (!email || !senha) {
-      setError('Completa email y contraseña.');
+      setError('Preencha e-mail e senha.');
       return;
     }
     if (senha.length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres.');
+      setError('A senha deve ter ao menos 6 caracteres.');
       return;
     }
 
@@ -30,7 +30,7 @@ export function Login() {
       navigate('/dashboard');
     } catch (err: any) {
       setError(
-        err?.response?.data?.message || 'Credenciales inválidas. Intenta de nuevo.',
+        err?.response?.data?.message || 'Credenciais inválidas. Tente novamente.',
       );
     } finally {
       setLoading(false);
@@ -42,13 +42,13 @@ export function Login() {
       <div className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-xl">
         <div className="mb-6 text-center">
           <h1 className="text-2xl font-bold text-brand-700">💅 Estética</h1>
-          <p className="mt-1 text-sm text-gray-500">Inicia sesión para continuar</p>
+          <p className="mt-1 text-sm text-gray-500">Entre para continuar</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">
-              Email
+              E-mail
             </label>
             <input
               type="email"
@@ -62,7 +62,7 @@ export function Login() {
 
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">
-              Contraseña
+              Senha
             </label>
             <input
               type="password"

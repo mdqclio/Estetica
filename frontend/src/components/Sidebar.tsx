@@ -36,30 +36,30 @@ export function Sidebar({ open, onClose }: Props) {
       >
         <div className="border-b px-6 py-5">
           <h1 className="text-lg font-bold text-brand-700">💅 Estética</h1>
-          <p className="mt-1 text-xs text-gray-500">Panel de gestión</p>
+          <p className="mt-1 text-xs text-gray-500">Painel de gestão</p>
         </div>
 
         <nav className="flex-1 space-y-1 px-3 py-4" onClick={onClose}>
           <NavLink to="/dashboard" className={navClass}>
-            Dashboard
+            Painel
           </NavLink>
           <NavLink to="/clientes" className={navClass}>
             Clientes
           </NavLink>
           <NavLink to="/servicos" className={navClass}>
-            Servicios
+            Serviços
           </NavLink>
           <NavLink to="/agendamentos" className={navClass}>
-            Turnos
+            Agendamentos
           </NavLink>
           {hasRole('ADMIN') && (
             <NavLink to="/reportes" className={navClass}>
-              Reportes
+              Relatórios
             </NavLink>
           )}
           {hasRole('ADMIN') && (
             <NavLink to="/usuarios" className={navClass}>
-              Usuarios
+              Usuários
             </NavLink>
           )}
         </nav>
@@ -75,7 +75,7 @@ export function Sidebar({ open, onClose }: Props) {
             onClick={logout}
             className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
           >
-            Cerrar sesión
+            Sair
           </button>
         </div>
       </aside>

@@ -5,7 +5,7 @@ import { reportesService } from '../services/reportes.service';
 const STATUS_LABEL: Record<StatusAgendamento, string> = {
   AGENDADO: 'Agendados',
   CONFIRMADO: 'Confirmados',
-  CONCLUIDO: 'Concluidos',
+  CONCLUIDO: 'Concluídos',
   CANCELADO: 'Cancelados',
 };
 
@@ -47,10 +47,10 @@ function rangoPreset(p: Preset): { desde: string; hasta: string } | null {
 }
 
 const PRESETS: { key: Preset; label: string }[] = [
-  { key: 'hoy', label: 'Hoy' },
+  { key: 'hoy', label: 'Hoje' },
   { key: 'semana', label: 'Esta semana' },
-  { key: 'mes', label: 'Este mes' },
-  { key: 'mesAnterior', label: 'Mes anterior' },
+  { key: 'mes', label: 'Este mês' },
+  { key: 'mesAnterior', label: 'Mês anterior' },
   { key: 'personalizado', label: 'Personalizado' },
 ];
 
@@ -103,7 +103,7 @@ export function Reportes() {
       setData(await reportesService.resumen(desde, hasta));
     } catch (err: any) {
       setError(
-        err?.response?.data?.message || 'No se pudo cargar el reporte.',
+        err?.response?.data?.message || 'Não foi possível carregar o relatório.',
       );
     } finally {
       setLoading(false);
@@ -120,7 +120,7 @@ export function Reportes() {
     try {
       await reportesService.exportCsv(desde, hasta);
     } catch {
-      alert('No se pudo exportar el CSV.');
+      alert('Não foi possível exportar o CSV.');
     } finally {
       setExporting(false);
     }
@@ -137,7 +137,7 @@ export function Reportes() {
   return (
     <div className="mx-auto max-w-6xl">
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">Reportes</h1>
+        <h1 className="text-2xl font-bold text-gray-800">Relatórios</h1>
         <button
           onClick={exportar}
           disabled={exporting || !data}
@@ -165,14 +165,14 @@ export function Reportes() {
       </div>
       {preset === 'personalizado' && (
         <div className="mb-4 flex flex-wrap items-center gap-2 text-sm text-gray-600">
-          <span>Desde</span>
+          <span>De</span>
           <input
             type="date"
             value={desde}
             onChange={(e) => setDesde(e.target.value)}
             className={field}
           />
-          <span>hasta</span>
+          <span>até</span>
           <input
             type="date"
             value={hasta}
@@ -192,26 +192,26 @@ export function Reportes() {
       )}
 
       {loading || !data ? (
-        <p className="text-gray-400">Cargando reporte…</p>
+        <p className="text-gray-400">Carregando relatório…</p>
       ) : (
         <>
           {/* Tarjetas */}
           <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
             <Card
-              label="Facturación"
+              label="Faturamento"
               value={formatBRL(data.faturamentoTotal)}
               accent="text-green-700"
             />
             <Card
-              label="Ticket promedio"
+              label="Ticket médio"
               value={formatBRL(data.ticketMedio)}
             />
             <Card
-              label="Turnos concluidos"
+              label="Agendamentos concluídos"
               value={`${data.turnosConcluidos} / ${data.totalTurnos}`}
             />
             <Card
-              label="Tasa de cancelación"
+              label="Taxa de cancelamento"
               value={`${(data.taxaCancelamento * 100).toFixed(1)}%`}
               accent="text-red-600"
             />
@@ -239,11 +239,11 @@ export function Reportes() {
           {/* Gráfico serie temporal */}
           <div className="mb-6 rounded-xl border bg-white p-5 shadow-sm">
             <h2 className="mb-4 text-sm font-semibold text-gray-700">
-              Facturación por {data.serie.granularidade === 'mes' ? 'mes' : 'día'}
+              Faturamento por {data.serie.granularidade === 'mes' ? 'mês' : 'dia'}
             </h2>
             {data.serie.pontos.length === 0 ? (
               <p className="text-sm text-gray-400">
-                Sin facturación en el período.
+                Sem faturamento no período.
               </p>
             ) : (
               <div className="flex h-44 items-end gap-1 overflow-x-auto">
@@ -270,28 +270,28 @@ export function Reportes() {
             {/* Por servicio */}
             <div className="rounded-xl border bg-white p-5 shadow-sm">
               <h2 className="mb-4 text-sm font-semibold text-gray-700">
-                Facturación por servicio
+                Faturamento por serviço
               </h2>
               <Tabla
                 rows={data.faturamentoPorServico}
-                col1="Servicio"
+                col1="Serviço"
               />
             </div>
             {/* Por profesional */}
             <div className="rounded-xl border bg-white p-5 shadow-sm">
               <h2 className="mb-4 text-sm font-semibold text-gray-700">
-                Facturación por profesional
+                Faturamento por profissional
               </h2>
               <Tabla
                 rows={data.faturamentoPorProfissional}
-                col1="Profesional"
+                col1="Profissional"
               />
             </div>
 
             {/* Turnos por estado */}
             <div className="rounded-xl border bg-white p-5 shadow-sm">
               <h2 className="mb-4 text-sm font-semibold text-gray-700">
-                Turnos por estado
+                Agendamentos por status
               </h2>
               <ul className="space-y-2">
                 {(Object.keys(data.turnosPorStatus) as StatusAgendamento[]).map(
@@ -324,15 +324,15 @@ function Tabla({
   col1: string;
 }) {
   if (rows.length === 0) {
-    return <p className="text-sm text-gray-400">Sin datos en el período.</p>;
+    return <p className="text-sm text-gray-400">Sem dados no período.</p>;
   }
   return (
     <table className="w-full text-left text-sm">
       <thead className="text-xs uppercase text-gray-500">
         <tr>
           <th className="pb-2">{col1}</th>
-          <th className="pb-2 text-right">Cant.</th>
-          <th className="pb-2 text-right">Facturación</th>
+          <th className="pb-2 text-right">Qtd.</th>
+          <th className="pb-2 text-right">Faturamento</th>
         </tr>
       </thead>
       <tbody className="divide-y">

@@ -39,7 +39,7 @@ export function ServicoForm() {
           preco: String(Number(s.preco)),
         }),
       )
-      .catch(() => setServerError('No se pudo cargar el servicio.'));
+      .catch(() => setServerError('Não foi possível carregar o serviço.'));
   }, [id]);
 
   function set<K extends keyof FormState>(key: K, value: string) {
@@ -48,13 +48,13 @@ export function ServicoForm() {
 
   function validate(): boolean {
     const e: Record<string, string> = {};
-    if (!form.nome.trim()) e.nome = 'El nombre es obligatorio.';
+    if (!form.nome.trim()) e.nome = 'O nome é obrigatório.';
     const dur = Number(form.duracaoMinutos);
     if (!Number.isInteger(dur) || dur < 1)
-      e.duracaoMinutos = 'Duración inválida (mínimo 1 minuto).';
+      e.duracaoMinutos = 'Duração inválida (mínimo 1 minuto).';
     const preco = Number(form.preco);
     if (Number.isNaN(preco) || preco < 0)
-      e.preco = 'Precio inválido (no negativo).';
+      e.preco = 'Preço inválido (não negativo).';
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -81,7 +81,7 @@ export function ServicoForm() {
       navigate('/servicos');
     } catch (err: any) {
       setServerError(
-        err?.response?.data?.message || 'No se pudo guardar el servicio.',
+        err?.response?.data?.message || 'Não foi possível salvar o serviço.',
       );
     } finally {
       setLoading(false);
@@ -94,7 +94,7 @@ export function ServicoForm() {
   return (
     <div className="mx-auto max-w-2xl">
       <h1 className="mb-6 text-2xl font-bold text-gray-800">
-        {editing ? 'Editar servicio' : 'Nuevo servicio'}
+        {editing ? 'Editar serviço' : 'Novo serviço'}
       </h1>
 
       {serverError && (
@@ -109,7 +109,7 @@ export function ServicoForm() {
       >
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-700">
-            Nombre *
+            Nome *
           </label>
           <input
             className={field}
@@ -123,7 +123,7 @@ export function ServicoForm() {
 
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-700">
-            Descripción
+            Descrição
           </label>
           <textarea
             className={field}
@@ -136,7 +136,7 @@ export function ServicoForm() {
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">
-              Duración (minutos) *
+              Duração (minutos) *
             </label>
             <input
               type="number"
@@ -154,7 +154,7 @@ export function ServicoForm() {
 
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">
-              Precio (R$) *
+              Preço (R$) *
             </label>
             <input
               type="number"
@@ -176,7 +176,7 @@ export function ServicoForm() {
             disabled={loading}
             className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 disabled:opacity-60"
           >
-            {loading ? 'Guardando…' : 'Guardar'}
+            {loading ? 'Salvando…' : 'Salvar'}
           </button>
           <Link
             to="/servicos"

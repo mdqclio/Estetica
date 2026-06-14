@@ -45,7 +45,7 @@ export class UsuariosService {
       select: SELECT,
     });
     if (!usuario) {
-      throw new NotFoundException('Usuario no encontrado');
+      throw new NotFoundException('Usuário não encontrado');
     }
     return usuario;
   }
@@ -100,7 +100,7 @@ export class UsuariosService {
   private async assertEmailUnico(email: string, ignoreId?: string) {
     const existente = await this.prisma.usuario.findUnique({ where: { email } });
     if (existente && existente.id !== ignoreId) {
-      throw new ConflictException('Ya existe un usuario con ese email');
+      throw new ConflictException('Já existe um usuário com esse e-mail');
     }
   }
 }

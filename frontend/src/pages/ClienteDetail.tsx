@@ -26,24 +26,24 @@ export function ClienteDetail() {
     clientesService
       .get(id)
       .then(setCliente)
-      .catch(() => setError('No se pudo cargar el cliente.'));
+      .catch(() => setError('Não foi possível carregar o cliente.'));
   }, [id]);
 
   if (error) {
     return <p className="text-red-600">{error}</p>;
   }
   if (!cliente) {
-    return <p className="text-gray-400">Cargando…</p>;
+    return <p className="text-gray-400">Carregando…</p>;
   }
 
   const fmt = (d?: string | null) =>
-    d ? new Date(d).toLocaleDateString('es-ES') : '—';
+    d ? new Date(d).toLocaleDateString('pt-BR') : '—';
 
   return (
     <div className="mx-auto max-w-2xl">
       <div className="mb-6 flex items-center justify-between">
         <Link to="/clientes" className="text-sm text-gray-500 hover:underline">
-          ← Volver
+          ← Voltar
         </Link>
         {podeEditar && (
           <Link
@@ -65,17 +65,17 @@ export function ClienteDetail() {
                 : 'bg-gray-200 text-gray-600'
             }`}
           >
-            {cliente.ativo ? 'Activo' : 'Inactivo'}
+            {cliente.ativo ? 'Ativo' : 'Inativo'}
           </span>
         </div>
 
         <Row label="CPF" value={cliente.cpf} />
-        <Row label="Teléfono" value={cliente.telefone} />
-        <Row label="Email" value={cliente.email} />
-        <Row label="Nacimiento" value={fmt(cliente.dataNascimento)} />
-        <Row label="Dirección" value={cliente.endereco} />
-        <Row label="Observaciones" value={cliente.observacoes} />
-        <Row label="Registrado" value={fmt(cliente.createdAt)} />
+        <Row label="Telefone" value={cliente.telefone} />
+        <Row label="E-mail" value={cliente.email} />
+        <Row label="Nascimento" value={fmt(cliente.dataNascimento)} />
+        <Row label="Endereço" value={cliente.endereco} />
+        <Row label="Observações" value={cliente.observacoes} />
+        <Row label="Cadastrado em" value={fmt(cliente.createdAt)} />
       </div>
     </div>
   );

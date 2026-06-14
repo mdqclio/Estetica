@@ -15,7 +15,7 @@ const LIMIT = 10;
 const STATUS_LABEL: Record<StatusAgendamento, string> = {
   AGENDADO: 'Agendado',
   CONFIRMADO: 'Confirmado',
-  CONCLUIDO: 'Concluido',
+  CONCLUIDO: 'Concluído',
   CANCELADO: 'Cancelado',
 };
 
@@ -72,7 +72,7 @@ export function AgendamentosList() {
       });
       setResult(res);
     } catch {
-      setError('No se pudieron cargar los turnos.');
+      setError('Não foi possível carregar os agendamentos.');
     } finally {
       setLoading(false);
     }
@@ -88,7 +88,7 @@ export function AgendamentosList() {
       await agendamentosService.updateStatus(a.id, nuevo);
       load();
     } catch (err: any) {
-      alert(err?.response?.data?.message || 'Acción no permitida.');
+      alert(err?.response?.data?.message || 'Ação não permitida.');
     }
   }
 
@@ -98,13 +98,13 @@ export function AgendamentosList() {
   return (
     <div className="mx-auto max-w-6xl">
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">Turnos</h1>
+        <h1 className="text-2xl font-bold text-gray-800">Agendamentos</h1>
         {podeGerenciar && (
           <Link
             to="/agendamentos/nuevo"
             className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700"
           >
-            + Nuevo turno
+            + Novo agendamento
           </Link>
         )}
       </div>
@@ -129,7 +129,7 @@ export function AgendamentosList() {
             }}
             className={field}
           >
-            <option value="">Todos los profesionales</option>
+            <option value="">Todos os profissionais</option>
             {profissionais.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.nome}
@@ -145,10 +145,10 @@ export function AgendamentosList() {
           }}
           className={field}
         >
-          <option value="">Todos los estados</option>
+          <option value="">Todos os status</option>
           <option value="AGENDADO">Agendado</option>
           <option value="CONFIRMADO">Confirmado</option>
-          <option value="CONCLUIDO">Concluido</option>
+          <option value="CONCLUIDO">Concluído</option>
           <option value="CANCELADO">Cancelado</option>
         </select>
         {(data || profissionalId || status) && (
@@ -161,7 +161,7 @@ export function AgendamentosList() {
             }}
             className="text-sm text-gray-500 hover:underline"
           >
-            Limpiar filtros
+            Limpar filtros
           </button>
         )}
       </div>
@@ -176,19 +176,19 @@ export function AgendamentosList() {
         <table className="w-full text-left text-sm">
           <thead className="bg-gray-50 text-xs uppercase text-gray-500">
             <tr>
-              <th className="px-4 py-3">Fecha / hora</th>
+              <th className="px-4 py-3">Data / hora</th>
               <th className="px-4 py-3">Cliente</th>
-              <th className="hidden px-4 py-3 md:table-cell">Servicio</th>
-              <th className="hidden px-4 py-3 lg:table-cell">Profesional</th>
-              <th className="px-4 py-3">Estado</th>
-              <th className="px-4 py-3 text-right">Acciones</th>
+              <th className="hidden px-4 py-3 md:table-cell">Serviço</th>
+              <th className="hidden px-4 py-3 lg:table-cell">Profissional</th>
+              <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3 text-right">Ações</th>
             </tr>
           </thead>
           <tbody className="divide-y">
             {loading ? (
               <tr>
                 <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
-                  Cargando…
+                  Carregando…
                 </td>
               </tr>
             ) : result && result.data.length > 0 ? (
@@ -261,7 +261,7 @@ export function AgendamentosList() {
             ) : (
               <tr>
                 <td colSpan={6} className="px-4 py-8 text-center text-gray-400">
-                  No hay turnos.
+                  Nenhum agendamento.
                 </td>
               </tr>
             )}
@@ -272,7 +272,7 @@ export function AgendamentosList() {
       {result && result.totalPages > 1 && (
         <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
           <span>
-            Página {result.page} de {result.totalPages} · {result.total} total
+            Página {result.page} de {result.totalPages} · {result.total} no total
           </span>
           <div className="flex gap-2">
             <button
@@ -287,7 +287,7 @@ export function AgendamentosList() {
               onClick={() => setPage((p) => p + 1)}
               className="rounded-lg border px-3 py-1 disabled:opacity-50"
             >
-              Siguiente
+              Próxima
             </button>
           </div>
         </div>

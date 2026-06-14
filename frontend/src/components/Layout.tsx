@@ -15,7 +15,7 @@ export function Layout() {
           <button
             onClick={() => setOpen(true)}
             className="rounded-lg p-2 text-gray-600 hover:bg-gray-100"
-            aria-label="Abrir menú"
+            aria-label="Abrir menu"
           >
             ☰
           </button>

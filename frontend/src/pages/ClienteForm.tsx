@@ -40,7 +40,7 @@ export function ClienteForm() {
           observacoes: c.observacoes || '',
         }),
       )
-      .catch(() => setServerError('No se pudo cargar el cliente.'));
+      .catch(() => setServerError('Não foi possível carregar o cliente.'));
   }, [id]);
 
   function set<K extends keyof ClienteInput>(key: K, value: string) {
@@ -49,10 +49,10 @@ export function ClienteForm() {
 
   function validate(): boolean {
     const e: Record<string, string> = {};
-    if (!form.nome.trim()) e.nome = 'El nombre es obligatorio.';
-    if (!/^\d{11}$/.test(form.cpf)) e.cpf = 'El CPF debe tener 11 dígitos.';
+    if (!form.nome.trim()) e.nome = 'O nome é obrigatório.';
+    if (!/^\d{11}$/.test(form.cpf)) e.cpf = 'O CPF deve ter 11 dígitos.';
     if (form.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email))
-      e.email = 'Email inválido.';
+      e.email = 'E-mail inválido.';
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -72,7 +72,7 @@ export function ClienteForm() {
       navigate('/clientes');
     } catch (err: any) {
       setServerError(
-        err?.response?.data?.message || 'No se pudo guardar el cliente.',
+        err?.response?.data?.message || 'Não foi possível salvar o cliente.',
       );
     } finally {
       setLoading(false);
@@ -85,7 +85,7 @@ export function ClienteForm() {
   return (
     <div className="mx-auto max-w-2xl">
       <h1 className="mb-6 text-2xl font-bold text-gray-800">
-        {editing ? 'Editar cliente' : 'Nuevo cliente'}
+        {editing ? 'Editar cliente' : 'Novo cliente'}
       </h1>
 
       {serverError && (
@@ -100,7 +100,7 @@ export function ClienteForm() {
       >
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-700">
-            Nombre *
+            Nome *
           </label>
           <input
             className={field}
@@ -130,7 +130,7 @@ export function ClienteForm() {
 
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">
-              Teléfono
+              Telefone
             </label>
             <input
               className={field}
@@ -143,7 +143,7 @@ export function ClienteForm() {
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">
-              Email
+              E-mail
             </label>
             <input
               className={field}
@@ -157,7 +157,7 @@ export function ClienteForm() {
 
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">
-              Fecha de nacimiento
+              Data de nascimento
             </label>
             <input
               type="date"
@@ -170,7 +170,7 @@ export function ClienteForm() {
 
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-700">
-            Dirección
+            Endereço
           </label>
           <input
             className={field}
@@ -181,7 +181,7 @@ export function ClienteForm() {
 
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-700">
-            Observaciones
+            Observações
           </label>
           <textarea
             className={field}
@@ -197,7 +197,7 @@ export function ClienteForm() {
             disabled={loading}
             className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 disabled:opacity-60"
           >
-            {loading ? 'Guardando…' : 'Guardar'}
+            {loading ? 'Salvando…' : 'Salvar'}
           </button>
           <Link
             to="/clientes"

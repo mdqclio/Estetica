@@ -29,7 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
 
     if (!usuario || !usuario.ativo) {
-      throw new UnauthorizedException('Usuario inactivo o inexistente');
+      throw new UnauthorizedException('Usuário inativo ou inexistente');
     }
 
     // Lo que se retorna queda disponible como request.user

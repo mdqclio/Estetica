@@ -7,7 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 const STATUS_LABEL: Record<StatusAgendamento, string> = {
   AGENDADO: 'Agendados',
   CONFIRMADO: 'Confirmados',
-  CONCLUIDO: 'Concluidos',
+  CONCLUIDO: 'Concluídos',
   CANCELADO: 'Cancelados',
 };
 
@@ -63,17 +63,17 @@ export function Dashboard() {
     dashboardService
       .metrics()
       .then(setM)
-      .catch(() => setError('No se pudieron cargar las métricas.'))
+      .catch(() => setError('Não foi possível carregar as métricas.'))
       .finally(() => setLoading(false));
   }, []);
 
   if (loading) {
-    return <p className="text-gray-400">Cargando métricas…</p>;
+    return <p className="text-gray-400">Carregando métricas…</p>;
   }
   if (error || !m) {
     return (
       <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
-        {error || 'Sin datos.'}
+        {error || 'Sem dados.'}
       </p>
     );
   }
@@ -82,23 +82,23 @@ export function Dashboard() {
 
   return (
     <div className="mx-auto max-w-6xl">
-      <h1 className="mb-1 text-2xl font-bold text-gray-800">Dashboard</h1>
+      <h1 className="mb-1 text-2xl font-bold text-gray-800">Painel</h1>
       <p className="mb-6 text-sm text-gray-500">
-        Hola, {user?.nome}. Resumen de la semana ({m.periodo.inicio} →{' '}
+        Olá, {user?.nome}. Resumo da semana ({m.periodo.inicio} →{' '}
         {m.periodo.fim}).
       </p>
 
       {/* Tarjetas */}
       <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Card label="Clientes activos" value={m.clientesAtivos} />
+        <Card label="Clientes ativos" value={m.clientesAtivos} />
         <Card
-          label="Turnos hoy"
+          label="Agendamentos de hoje"
           value={m.turnosHoje}
           accent="text-brand-700"
         />
-        <Card label="Turnos esta semana" value={m.turnosSemana} />
+        <Card label="Agendamentos da semana" value={m.turnosSemana} />
         <Card
-          label="Facturación (semana)"
+          label="Faturamento (semana)"
           value={formatBRL(m.faturamentoEstimado)}
           accent="text-green-700"
         />
@@ -108,7 +108,7 @@ export function Dashboard() {
         {/* Gráfico: turnos por día */}
         <div className="rounded-xl border bg-white p-5 shadow-sm">
           <h2 className="mb-4 text-sm font-semibold text-gray-700">
-            Turnos por día
+            Agendamentos por dia
           </h2>
           <div className="flex h-40 items-end justify-between gap-2">
             {m.turnosPorDia.map((d) => (
@@ -138,7 +138,7 @@ export function Dashboard() {
         {/* Turnos por status */}
         <div className="rounded-xl border bg-white p-5 shadow-sm">
           <h2 className="mb-4 text-sm font-semibold text-gray-700">
-            Turnos por estado
+            Agendamentos por status
           </h2>
           <ul className="space-y-2">
             {(Object.keys(m.turnosPorStatus) as StatusAgendamento[]).map(
@@ -161,7 +161,7 @@ export function Dashboard() {
         <div className="rounded-xl border bg-white p-5 shadow-sm">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-gray-700">
-              Próximos turnos
+              Próximos agendamentos
             </h2>
             <Link
               to="/agendamentos"
@@ -171,7 +171,7 @@ export function Dashboard() {
             </Link>
           </div>
           {m.proximosTurnos.length === 0 ? (
-            <p className="text-sm text-gray-400">No hay turnos próximos.</p>
+            <p className="text-sm text-gray-400">Nenhum agendamento próximo.</p>
           ) : (
             <ul className="divide-y">
               {m.proximosTurnos.map((a) => (
@@ -196,10 +196,10 @@ export function Dashboard() {
         {/* Servicios más solicitados */}
         <div className="rounded-xl border bg-white p-5 shadow-sm">
           <h2 className="mb-4 text-sm font-semibold text-gray-700">
-            Servicios más solicitados
+            Serviços mais solicitados
           </h2>
           {m.servicosMaisSolicitados.length === 0 ? (
-            <p className="text-sm text-gray-400">Sin datos.</p>
+            <p className="text-sm text-gray-400">Sem dados.</p>
           ) : (
             <ul className="space-y-2">
               {m.servicosMaisSolicitados.map((s) => (

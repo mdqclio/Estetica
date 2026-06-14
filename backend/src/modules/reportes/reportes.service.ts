@@ -31,7 +31,7 @@ export class ReportesService {
     const start = parseInicio(query.desde);
     const end = parseFim(query.hasta);
     if (end < start) {
-      throw new BadRequestException('"hasta" no puede ser anterior a "desde".');
+      throw new BadRequestException('A data inicial deve ser anterior à data final.');
     }
     return { start, end };
   }
@@ -109,25 +109,25 @@ export class ReportesService {
     };
     const row = (...cells: (string | number)[]) => lines.push(cells.map(esc).join(','));
 
-    row('Reporte financiero');
+    row('Relatório financeiro');
     row('Período', `${r.periodo.desde} a ${r.periodo.hasta}`);
     row('');
     row('Métrica', 'Valor');
     row('Faturamento total', r.faturamentoTotal);
-    row('Ticket promedio', r.ticketMedio);
-    row('Turnos totales', r.totalTurnos);
-    row('Turnos concluidos', r.turnosConcluidos);
-    row('Tasa de cancelación', r.taxaCancelamento);
+    row('Ticket médio', r.ticketMedio);
+    row('Total de agendamentos', r.totalTurnos);
+    row('Agendamentos concluídos', r.turnosConcluidos);
+    row('Taxa de cancelamento', r.taxaCancelamento);
     row('');
-    row('Faturamento por servicio');
-    row('Servicio', 'Faturamento', 'Cantidad');
+    row('Faturamento por serviço');
+    row('Serviço', 'Faturamento', 'Quantidade');
     for (const s of r.faturamentoPorServico) row(s.nome, s.total, s.quantidade);
     row('');
-    row('Faturamento por profesional');
-    row('Profesional', 'Faturamento', 'Cantidad');
+    row('Faturamento por profissional');
+    row('Profissional', 'Faturamento', 'Quantidade');
     for (const p of r.faturamentoPorProfissional) row(p.nome, p.total, p.quantidade);
     row('');
-    row('Serie de faturamento', `(por ${r.serie.granularidade})`);
+    row('Série de faturamento', `(por ${r.serie.granularidade})`);
     row('Período', 'Faturamento');
     for (const pt of r.serie.pontos) row(pt.periodo, pt.total);
 

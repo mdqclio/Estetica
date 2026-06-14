@@ -24,7 +24,7 @@ export function ClientesList() {
       const data = await clientesService.list({ search, page, limit: LIMIT });
       setResult(data);
     } catch {
-      setError('No se pudieron cargar los clientes.');
+      setError('Não foi possível carregar os clientes.');
     } finally {
       setLoading(false);
     }
@@ -54,7 +54,7 @@ export function ClientesList() {
       }
       load();
     } catch (err: any) {
-      alert(err?.response?.data?.message || 'Acción no permitida.');
+      alert(err?.response?.data?.message || 'Ação não permitida.');
     }
   }
 
@@ -67,7 +67,7 @@ export function ClientesList() {
             to="/clientes/nuevo"
             className="inline-flex items-center justify-center rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700"
           >
-            + Nuevo cliente
+            + Novo cliente
           </Link>
         )}
       </div>
@@ -76,7 +76,7 @@ export function ClientesList() {
         type="text"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        placeholder="Buscar por nombre, CPF, teléfono o email…"
+        placeholder="Buscar por nome, CPF, telefone ou e-mail…"
         className="mb-4 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
       />
 
@@ -90,18 +90,18 @@ export function ClientesList() {
         <table className="w-full text-left text-sm">
           <thead className="bg-gray-50 text-xs uppercase text-gray-500">
             <tr>
-              <th className="px-4 py-3">Nombre</th>
+              <th className="px-4 py-3">Nome</th>
               <th className="hidden px-4 py-3 sm:table-cell">CPF</th>
-              <th className="hidden px-4 py-3 md:table-cell">Teléfono</th>
-              <th className="px-4 py-3">Estado</th>
-              <th className="px-4 py-3 text-right">Acciones</th>
+              <th className="hidden px-4 py-3 md:table-cell">Telefone</th>
+              <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3 text-right">Ações</th>
             </tr>
           </thead>
           <tbody className="divide-y">
             {loading ? (
               <tr>
                 <td colSpan={5} className="px-4 py-8 text-center text-gray-400">
-                  Cargando…
+                  Carregando…
                 </td>
               </tr>
             ) : result && result.data.length > 0 ? (
@@ -126,7 +126,7 @@ export function ClientesList() {
                           : 'bg-gray-200 text-gray-600'
                       }`}
                     >
-                      {c.ativo ? 'Activo' : 'Inactivo'}
+                      {c.ativo ? 'Ativo' : 'Inativo'}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
@@ -170,7 +170,7 @@ export function ClientesList() {
             ) : (
               <tr>
                 <td colSpan={5} className="px-4 py-8 text-center text-gray-400">
-                  No hay clientes.
+                  Nenhum cliente encontrado.
                 </td>
               </tr>
             )}
@@ -182,7 +182,7 @@ export function ClientesList() {
       {result && result.totalPages > 1 && (
         <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
           <span>
-            Página {result.page} de {result.totalPages} · {result.total} total
+            Página {result.page} de {result.totalPages} · {result.total} no total
           </span>
           <div className="flex gap-2">
             <button
@@ -197,7 +197,7 @@ export function ClientesList() {
               onClick={() => setPage((p) => p + 1)}
               className="rounded-lg border px-3 py-1 disabled:opacity-50"
             >
-              Siguiente
+              Próxima
             </button>
           </div>
         </div>

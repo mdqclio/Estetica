@@ -55,7 +55,7 @@ export class ClientesService {
   async findOne(id: string) {
     const cliente = await this.prisma.cliente.findUnique({ where: { id } });
     if (!cliente) {
-      throw new NotFoundException('Cliente no encontrado');
+      throw new NotFoundException('Cliente não encontrado');
     }
     return cliente;
   }
@@ -107,7 +107,7 @@ export class ClientesService {
   private async assertCpfUnico(cpf: string, ignoreId?: string) {
     const existente = await this.prisma.cliente.findUnique({ where: { cpf } });
     if (existente && existente.id !== ignoreId) {
-      throw new ConflictException('Ya existe un cliente con ese CPF');
+      throw new ConflictException('Já existe um cliente com esse CPF');
     }
   }
 }

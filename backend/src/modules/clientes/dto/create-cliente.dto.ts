@@ -10,24 +10,24 @@ import {
 
 export class CreateClienteDto {
   @IsString()
-  @IsNotEmpty({ message: 'El nombre es obligatorio' })
+  @IsNotEmpty({ message: 'O nome é obrigatório' })
   nome: string;
 
   @IsString()
-  @Matches(/^\d{11}$/, { message: 'El CPF debe tener 11 dígitos numéricos' })
+  @Matches(/^\d{11}$/, { message: 'O CPF deve ter 11 dígitos numéricos' })
   cpf: string;
 
   @IsOptional()
   @IsString()
-  @Length(8, 20, { message: 'Teléfono inválido' })
+  @Length(8, 20, { message: 'Telefone inválido' })
   telefone?: string;
 
   @IsOptional()
-  @IsEmail({}, { message: 'Email inválido' })
+  @IsEmail({}, { message: 'E-mail inválido' })
   email?: string;
 
   @IsOptional()
-  @IsDateString({}, { message: 'Fecha de nacimiento inválida (YYYY-MM-DD)' })
+  @IsDateString({}, { message: 'Data de nascimento inválida (YYYY-MM-DD)' })
   dataNascimento?: string;
 
   @IsOptional()

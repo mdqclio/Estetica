@@ -75,14 +75,14 @@ export class AgendamentosService {
       include: INCLUDE,
     });
     if (!agendamento) {
-      throw new NotFoundException('Turno no encontrado');
+      throw new NotFoundException('Agendamento não encontrado');
     }
     // El PROFISSIONAL solo puede ver turnos propios.
     if (
       user.perfil === Perfil.PROFISSIONAL &&
       agendamento.profissionalId !== user.id
     ) {
-      throw new ForbiddenException('No tienes acceso a este turno.');
+      throw new ForbiddenException('Você não tem acesso a este agendamento.');
     }
     return agendamento;
   }
@@ -99,7 +99,7 @@ export class AgendamentosService {
 
     if (fim <= inicio) {
       throw new BadRequestException(
-        'dataHoraFim debe ser posterior a dataHoraInicio.',
+        'dataHoraFim deve ser posterior a dataHoraInicio.',
       );
     }
 
@@ -124,7 +124,7 @@ export class AgendamentosService {
   async update(id: string, dto: UpdateAgendamentoDto) {
     const actual = await this.prisma.agendamento.findUnique({ where: { id } });
     if (!actual) {
-      throw new NotFoundException('Turno no encontrado');
+      throw new NotFoundException('Agendamento não encontrado');
     }
 
     if (dto.clienteId) await this.assertClienteExiste(dto.clienteId);
@@ -150,7 +150,7 @@ export class AgendamentosService {
 
     if (fim <= inicio) {
       throw new BadRequestException(
-        'dataHoraFim debe ser posterior a dataHoraInicio.',
+        'dataHoraFim deve ser posterior a dataHoraInicio.',
       );
     }
 
@@ -176,7 +176,7 @@ export class AgendamentosService {
   async updateStatus(id: string, status: StatusAgendamento) {
     const actual = await this.prisma.agendamento.findUnique({ where: { id } });
     if (!actual) {
-      throw new NotFoundException('Turno no encontrado');
+      throw new NotFoundException('Agendamento não encontrado');
     }
     return this.prisma.agendamento.update({
       where: { id },
@@ -192,7 +192,7 @@ export class AgendamentosService {
       where: { id: clienteId },
     });
     if (!cliente) {
-      throw new BadRequestException('El cliente indicado no existe.');
+      throw new BadRequestException('O cliente indicado não existe.');
     }
     return cliente;
   }
@@ -202,7 +202,7 @@ export class AgendamentosService {
       where: { id: servicoId },
     });
     if (!servico) {
-      throw new BadRequestException('El servicio indicado no existe.');
+      throw new BadRequestException('O serviço indicado não existe.');
     }
     return servico;
   }
@@ -212,15 +212,15 @@ export class AgendamentosService {
       where: { id: profissionalId },
     });
     if (!profissional) {
-      throw new BadRequestException('El profesional indicado no existe.');
+      throw new BadRequestException('O profissional indicado não existe.');
     }
     if (profissional.perfil !== Perfil.PROFISSIONAL) {
       throw new BadRequestException(
-        'El usuario asignado no tiene perfil PROFISSIONAL.',
+        'O usuário atribuído não tem perfil PROFISSIONAL.',
       );
     }
     if (!profissional.ativo) {
-      throw new BadRequestException('El profesional está inactivo.');
+      throw new BadRequestException('O profissional está inativo.');
     }
     return profissional;
   }
@@ -244,7 +244,7 @@ export class AgendamentosService {
     });
     if (conflito) {
       throw new ConflictException(
-        'El profesional ya tiene un turno que se solapa con ese horario.',
+        'Já existe um agendamento nesse horário para o profissional.',
       );
     }
   }

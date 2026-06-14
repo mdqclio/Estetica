@@ -80,7 +80,7 @@ export function AgendamentoForm() {
           observacoes: a.observacoes || '',
         }),
       )
-      .catch(() => setServerError('No se pudo cargar el turno.'));
+      .catch(() => setServerError('Não foi possível carregar o agendamento.'));
   }, [id]);
 
   function set<K extends keyof FormState>(key: K, value: string) {
@@ -104,10 +104,10 @@ export function AgendamentoForm() {
 
   function validate(): boolean {
     const e: Record<string, string> = {};
-    if (!form.clienteId) e.clienteId = 'Selecciona un cliente.';
-    if (!form.servicoId) e.servicoId = 'Selecciona un servicio.';
-    if (!form.profissionalId) e.profissionalId = 'Selecciona un profesional.';
-    if (!form.dataHoraInicio) e.dataHoraInicio = 'Indica fecha y hora.';
+    if (!form.clienteId) e.clienteId = 'Selecione um cliente.';
+    if (!form.servicoId) e.servicoId = 'Selecione um serviço.';
+    if (!form.profissionalId) e.profissionalId = 'Selecione um profissional.';
+    if (!form.dataHoraInicio) e.dataHoraInicio = 'Informe a data e hora.';
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -139,7 +139,7 @@ export function AgendamentoForm() {
       setServerError(
         Array.isArray(msg)
           ? msg.join(', ')
-          : msg || 'No se pudo guardar el turno.',
+          : msg || 'Não foi possível salvar o agendamento.',
       );
     } finally {
       setLoading(false);
@@ -152,7 +152,7 @@ export function AgendamentoForm() {
   return (
     <div className="mx-auto max-w-2xl">
       <h1 className="mb-6 text-2xl font-bold text-gray-800">
-        {editing ? 'Editar turno' : 'Nuevo turno'}
+        {editing ? 'Editar agendamento' : 'Novo agendamento'}
       </h1>
 
       {serverError && (
@@ -174,7 +174,7 @@ export function AgendamentoForm() {
             value={form.clienteId}
             onChange={(e) => set('clienteId', e.target.value)}
           >
-            <option value="">— Seleccionar —</option>
+            <option value="">— Selecionar —</option>
             {clientes.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.nome}
@@ -188,14 +188,14 @@ export function AgendamentoForm() {
 
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-700">
-            Servicio *
+            Serviço *
           </label>
           <select
             className={field}
             value={form.servicoId}
             onChange={(e) => set('servicoId', e.target.value)}
           >
-            <option value="">— Seleccionar —</option>
+            <option value="">— Selecionar —</option>
             {servicos.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.nome} ({s.duracaoMinutos} min)
@@ -209,14 +209,14 @@ export function AgendamentoForm() {
 
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-700">
-            Profesional *
+            Profissional *
           </label>
           <select
             className={field}
             value={form.profissionalId}
             onChange={(e) => set('profissionalId', e.target.value)}
           >
-            <option value="">— Seleccionar —</option>
+            <option value="">— Selecionar —</option>
             {profissionais.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.nome}
@@ -230,7 +230,7 @@ export function AgendamentoForm() {
 
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-700">
-            Fecha y hora de inicio *
+            Data e hora de início *
           </label>
           <input
             type="datetime-local"
@@ -243,14 +243,14 @@ export function AgendamentoForm() {
           )}
           {fimCalculado && (
             <p className="mt-1 text-xs text-gray-500">
-              Fin estimado: {fimCalculado} (según duración del servicio)
+              Fim estimado: {fimCalculado} (conforme a duração do serviço)
             </p>
           )}
         </div>
 
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-700">
-            Observaciones
+            Observações
           </label>
           <textarea
             className={field}
@@ -266,7 +266,7 @@ export function AgendamentoForm() {
             disabled={loading}
             className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 disabled:opacity-60"
           >
-            {loading ? 'Guardando…' : 'Guardar'}
+            {loading ? 'Salvando…' : 'Salvar'}
           </button>
           <Link
             to="/agendamentos"

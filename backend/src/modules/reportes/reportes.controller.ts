@@ -30,7 +30,7 @@ export class ReportesController {
   @Header('Content-Type', 'text/csv; charset=utf-8')
   @Header(
     'Content-Disposition',
-    'attachment; filename="reporte-financiero.csv"',
+    'attachment; filename="relatorio-financeiro.csv"',
   )
   async export(@Query() query: QueryReporteDto): Promise<StreamableFile> {
     const csv = await this.reportesService.exportCsv(query);

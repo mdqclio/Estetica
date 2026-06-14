@@ -10,22 +10,22 @@ import {
 
 export class CreateServicoDto {
   @IsString()
-  @IsNotEmpty({ message: 'El nombre es obligatorio' })
+  @IsNotEmpty({ message: 'O nome é obrigatório' })
   nome: string;
 
   @IsOptional()
   @IsString()
   descricao?: string;
 
-  @IsInt({ message: 'La duración debe ser un número entero de minutos' })
-  @Min(1, { message: 'La duración mínima es 1 minuto' })
+  @IsInt({ message: 'A duração deve ser um número inteiro de minutos' })
+  @Min(1, { message: 'A duração mínima é 1 minuto' })
   duracaoMinutos: number;
 
   @IsNumber(
     { maxDecimalPlaces: 2 },
-    { message: 'El precio debe ser un número con hasta 2 decimales' },
+    { message: 'O valor deve ser um número com até 2 casas decimais' },
   )
-  @Min(0, { message: 'El precio no puede ser negativo' })
+  @Min(0, { message: 'O valor não pode ser negativo' })
   preco: number;
 
   @IsOptional()

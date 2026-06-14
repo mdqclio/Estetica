@@ -5,6 +5,12 @@ import { usuariosService } from '../services/usuarios.service';
 
 const PERFILES: Perfil[] = ['ADMIN', 'RECEPCIONISTA', 'PROFISSIONAL'];
 
+const PERFIL_LABEL: Record<Perfil, string> = {
+  ADMIN: 'Administrador',
+  RECEPCIONISTA: 'Recepcionista',
+  PROFISSIONAL: 'Profissional',
+};
+
 const empty: UsuarioInput = {
   nome: '',
   email: '',
@@ -36,7 +42,7 @@ export function UsuarioForm() {
           ativo: u.ativo,
         }),
       )
-      .catch(() => setServerError('No se pudo cargar el usuario.'));
+      .catch(() => setServerError('Não foi possível carregar o usuário.'));
   }, [id]);
 
   function set<K extends keyof UsuarioInput>(key: K, value: UsuarioInput[K]) {
@@ -45,14 +51,14 @@ export function UsuarioForm() {
 
   function validate(): boolean {
     const e: Record<string, string> = {};
-    if (!form.nome.trim()) e.nome = 'El nombre es obligatorio.';
+    if (!form.nome.trim()) e.nome = 'O nome é obrigatório.';
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(form.email))
-      e.email = 'Email inválido.';
+      e.email = 'E-mail inválido.';
     // En alta la contraseña es obligatoria; al editar, en blanco = no cambiar.
     if (!editing && (!form.senha || form.senha.length < 6))
-      e.senha = 'La contraseña debe tener al menos 6 caracteres.';
+      e.senha = 'A senha deve ter pelo menos 6 caracteres.';
     if (editing && form.senha && form.senha.length < 6)
-      e.senha = 'La contraseña debe tener al menos 6 caracteres.';
+      e.senha = 'A senha deve ter pelo menos 6 caracteres.';
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -75,7 +81,7 @@ export function UsuarioForm() {
       setServerError(
         Array.isArray(msg)
           ? msg.join(', ')
-          : msg || 'No se pudo guardar el usuario.',
+          : msg || 'Não foi possível salvar o usuário.',
       );
     } finally {
       setLoading(false);
@@ -88,7 +94,7 @@ export function UsuarioForm() {
   return (
     <div className="mx-auto max-w-2xl">
       <h1 className="mb-6 text-2xl font-bold text-gray-800">
-        {editing ? 'Editar usuario' : 'Nuevo usuario'}
+        {editing ? 'Editar usuário' : 'Novo usuário'}
       </h1>
 
       {serverError && (
@@ -103,7 +109,7 @@ export function UsuarioForm() {
       >
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-700">
-            Nombre *
+            Nome *
           </label>
           <input
             className={field}
@@ -117,7 +123,7 @@ export function UsuarioForm() {
 
         <div>
           <label className="mb-1 block text-sm font-medium text-gray-700">
-            Email *
+            E-mail *
           </label>
           <input
             className={field}
@@ -132,7 +138,7 @@ export function UsuarioForm() {
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">
-              {editing ? 'Contraseña (dejar en blanco para no cambiar)' : 'Contraseña *'}
+              {editing ? 'Senha (deixe em branco para não alterar)' : 'Senha *'}
             </label>
             <input
               type="password"
@@ -156,7 +162,7 @@ export function UsuarioForm() {
             >
               {PERFILES.map((p) => (
                 <option key={p} value={p}>
-                  {p}
+                  {PERFIL_LABEL[p]}
                 </option>
               ))}
             </select>
@@ -170,7 +176,7 @@ export function UsuarioForm() {
               checked={form.ativo ?? true}
               onChange={(e) => set('ativo', e.target.checked)}
             />
-            Activo
+            Ativo
           </label>
         )}
 
@@ -180,7 +186,7 @@ export function UsuarioForm() {
             disabled={loading}
             className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 disabled:opacity-60"
           >
-            {loading ? 'Guardando…' : 'Guardar'}
+            {loading ? 'Salvando…' : 'Salvar'}
           </button>
           <Link
             to="/usuarios"

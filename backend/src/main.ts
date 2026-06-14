@@ -9,7 +9,7 @@ async function bootstrap() {
   // Variables de entorno obligatorias (falla rápido y claro si faltan en prod).
   for (const key of ['DATABASE_URL', 'JWT_SECRET']) {
     if (!process.env[key]) {
-      throw new Error(`Falta la variable de entorno obligatoria: ${key}`);
+      throw new Error(`Falta a variável de ambiente obrigatória: ${key}`);
     }
   }
 
@@ -39,6 +39,6 @@ async function bootstrap() {
   const port = process.env.PORT || 3001;
   // Bind a 0.0.0.0 para que Render pueda enrutar el tráfico al contenedor.
   await app.listen(port, '0.0.0.0');
-  console.log(`🚀 API escuchando en el puerto ${port} (prefijo /api)`);
+  console.log(`🚀 API escutando na porta ${port} (prefixo /api)`);
 }
 bootstrap();
